@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devis Gratuit — Arsia Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:    #f7f2ea;
+  --warm:     #ede4d3;
+  --parchment:#e4d9c4;
+  --terra:    #b85c38;
+  --terra-dk: #8f3e22;
+  --terra-lt: #d9856a;
+  --sand:     #c9a97a;
+  --sienna:   #7a4a2e;
+  --ink:      #1e1612;
+  --muted:    #7a6a58;
+  --border:   #d9cdb8;
+  --white:    #fdfaf5;
+  --sage:     #4a6741;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans:  'Jost', sans-serif;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); }
+
+/* NAV */
+nav {
+  background: var(--ink);
+  padding: 16px 48px;
+  display: flex; align-items:center; justify-content:space-between;
+  border-bottom: 2px solid var(--terra);
+}
+.nav-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--white); text-decoration:none; }
+.nav-logo span { color: var(--terra-lt); }
+.nav-back {
+  font-size: 0.75rem; font-weight:500; letter-spacing:0.12em;
+  text-transform:uppercase; color: rgba(255,255,255,0.4);
+  text-decoration:none; transition: color 0.2s;
+  display:flex; align-items:center; gap:6px;
+}
+.nav-back:hover { color: var(--terra-lt); }
+
+/* HERO */
+.hero {
+  background: var(--ink);
+  padding: 64px 80px 80px;
+  position: relative; overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 50% 80% at 80% 50%, rgba(184,92,56,0.1), transparent);
+  pointer-events:none;
+}
+.hero-tag {
+  font-size: 0.65rem; font-weight:600; letter-spacing:0.25em;
+  text-transform:uppercase; color: var(--terra-lt);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4vw, 4rem);
+  font-weight: 300; color: var(--white);
+  line-height: 1.1; letter-spacing:-0.02em;
+  margin-bottom: 16px;
+}
+.hero h1 em { font-style:italic; color: var(--terra-lt); }
+.hero p {
+  font-family: var(--serif);
+  font-size: 1.05rem; color: rgba(255,255,255,0.5);
+  line-height: 1.75; max-width: 520px;
+}
+
+/* STEPS BAR */
+.steps-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 80px;
+  display: flex; align-items:center; gap:0;
+  position: sticky; top:0; z-index:50;
+}
+.step-item {
+  display: flex; align-items:center; gap:10px;
+  padding: 18px 24px 18px 0;
+  font-size: 0.75rem; font-weight:500;
+  letter-spacing:0.08em; text-transform:uppercase;
+  color: var(--muted); opacity:0.4;
+  transition: opacity 0.3s;
+  cursor: default;
+}
+.step-item.active { opacity:1; color: var(--terra); }
+.step-item.done { opacity:0.7; color: var(--sage); }
+.step-num {
+  width:24px; height:24px; border-radius:50%;
+  border: 1.5px solid currentColor;
+  display:flex; align-items:center; justify-content:center;
+  font-size: 0.68rem; font-weight:600; flex-shrink:0;
+}
+.step-item.done .step-num { background: var(--sage); border-color:var(--sage); color:white; }
+.step-sep { width:32px; height:1px; background: var(--border); flex-shrink:0; }
+
+/* MAIN */
+.main { max-width: 860px; margin: 0 auto; padding: 60px 40px 100px; }
+
+/* STEP PANELS */
+.step-panel { display:none; }
+.step-panel.active { display:block; animation: fadeUp 0.4s ease both; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.panel-title {
+  font-family: var(--serif);
+  font-size: 1.8rem; font-weight:300;
+  letter-spacing:-0.02em; margin-bottom:6px;
+}
+.panel-title em { font-style:italic; color:var(--terra); }
+.panel-sub {
+  font-size:0.88rem; color:var(--muted);
+  line-height:1.6; margin-bottom:36px;
+}
+
+/* CHOICE CARDS */
+.choices {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px; margin-bottom: 32px;
+}
+.choice-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 6px; padding: 20px 18px;
+  cursor: pointer; transition: all 0.2s;
+  display:flex; flex-direction:column; gap:8px;
+}
+.choice-card:hover { border-color: var(--terra-lt); transform:translateY(-2px); box-shadow:0 8px 24px rgba(30,22,18,0.07); }
+.choice-card.selected { border-color: var(--terra); background: #fdf3ee; }
+.choice-icon { font-size:1.6rem; }
+.choice-label { font-weight:600; font-size:0.88rem; }
+.choice-desc { font-size:0.78rem; color:var(--muted); line-height:1.45; }
+
+/* CHECKBOX GRID */
+.checkbox-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px; margin-bottom: 32px;
+}
+.checkbox-item {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 6px; padding: 14px 16px;
+  cursor:pointer; transition:all 0.2s;
+  display:flex; align-items:center; gap:10px;
+  font-size:0.85rem; font-weight:500;
+}
+.checkbox-item:hover { border-color:var(--terra-lt); }
+.checkbox-item.selected { border-color:var(--terra); background:#fdf3ee; }
+.checkbox-item .cb-box {
+  width:18px; height:18px; border-radius:3px;
+  border:2px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.65rem; transition:all 0.2s;
+}
+.checkbox-item.selected .cb-box { background:var(--terra); border-color:var(--terra); color:white; }
+
+/* RADIO GROUP */
+.radio-group { display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
+.radio-item {
+  background:var(--white); border:2px solid var(--border);
+  border-radius:6px; padding:16px 20px;
+  cursor:pointer; transition:all 0.2s;
+  display:flex; align-items:center; gap:14px;
+}
+.radio-item:hover { border-color:var(--terra-lt); }
+.radio-item.selected { border-color:var(--terra); background:#fdf3ee; }
+.radio-dot {
+  width:18px; height:18px; border-radius:50%;
+  border:2px solid var(--border); flex-shrink:0;
+  transition:all 0.2s;
+}
+.radio-item.selected .radio-dot { background:var(--terra); border-color:var(--terra); box-shadow:0 0 0 3px rgba(184,92,56,0.15); }
+.radio-content { flex:1; }
+.radio-label { font-weight:600; font-size:0.88rem; }
+.radio-desc { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+
+/* FORM FIELDS */
+.form-group { margin-bottom:20px; }
+.form-label {
+  display:block; font-size:0.68rem; font-weight:600;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:8px;
+}
+.form-input, .form-textarea {
+  width:100%; background:var(--white);
+  border:1.5px solid var(--border);
+  color:var(--ink); font-family:var(--sans); font-size:0.92rem;
+  padding:13px 16px; border-radius:4px; outline:none;
+  transition:border-color 0.2s;
+}
+.form-input:focus, .form-textarea:focus { border-color:var(--terra); }
+.form-textarea { resize:vertical; min-height:100px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+/* NAV BUTTONS */
+.panel-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:40px; padding-top:28px;
+  border-top:1px solid var(--border);
+}
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 28px; font-family:var(--sans);
+  font-size:0.78rem; font-weight:500; letter-spacing:0.1em;
+  text-transform:uppercase; border:none; cursor:pointer;
+  border-radius:3px; transition:all 0.2s; text-decoration:none;
+}
+.btn-primary { background:var(--terra); color:white; }
+.btn-primary:hover { background:var(--terra-dk); transform:translateY(-1px); }
+.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
+.btn-ghost:hover { background:var(--warm); color:var(--ink); }
+.btn-success { background:var(--sage); color:white; font-size:0.85rem; padding:16px 36px; }
+.btn-success:hover { background:#3a5632; transform:translateY(-1px); }
+.btn:disabled { opacity:0.4; cursor:not-allowed; transform:none !important; }
+
+/* DEVIS RESULT */
+.devis-result {
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:8px; overflow:hidden;
+  margin-bottom:32px;
+}
+.devis-header {
+  background:var(--ink); padding:32px 36px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.devis-header-left h2 {
+  font-family:var(--serif); font-size:1.6rem;
+  font-weight:300; color:var(--white);
+}
+.devis-header-left p {
+  font-size:0.75rem; color:rgba(255,255,255,0.35);
+  margin-top:4px; letter-spacing:0.1em;
+}
+.devis-badge {
+  background:var(--terra); color:white;
+  font-size:0.7rem; font-weight:600;
+  letter-spacing:0.15em; text-transform:uppercase;
+  padding:8px 16px; border-radius:2px;
+}
+.devis-body { padding:36px; }
+.devis-section { margin-bottom:28px; }
+.devis-section-title {
+  font-size:0.65rem; font-weight:600; letter-spacing:0.2em;
+  text-transform:uppercase; color:var(--terra);
+  margin-bottom:14px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.devis-line {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  padding:10px 0; border-bottom:1px solid #f0ebe2;
+  gap:20px;
+}
+.devis-line:last-child { border-bottom:none; }
+.devis-line-label { font-size:0.88rem; color:var(--ink); flex:1; }
+.devis-line-label small { display:block; font-size:0.76rem; color:var(--muted); margin-top:2px; line-height:1.4; }
+.devis-line-val {
+  font-family:var(--serif); font-size:1.1rem;
+  font-weight:400; color:var(--terra); white-space:nowrap;
+}
+.devis-total {
+  background: linear-gradient(135deg, #1e1612, #2d1f18);
+  padding:24px 36px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.devis-total-label {
+  font-size:0.7rem; letter-spacing:0.2em;
+  text-transform:uppercase; color:rgba(255,255,255,0.4);
+}
+.devis-total-val {
+  font-family:var(--serif); font-size:2.2rem;
+  font-weight:300; color:var(--terra-lt);
+}
+.devis-total-val small {
+  font-family:var(--sans); font-size:0.75rem;
+  color:rgba(255,255,255,0.3); margin-left:4px;
+}
+.devis-note {
+  font-size:0.78rem; color:var(--muted);
+  line-height:1.6; margin-top:16px;
+  padding:14px 16px; background:var(--warm);
+  border-radius:4px; border-left:3px solid var(--sand);
+}
+
+/* PREMIUM BANNER */
+.premium-banner {
+  background:linear-gradient(135deg, var(--sienna), var(--terra-dk));
+  border-radius:6px; padding:24px 28px;
+  display:flex; align-items:center; gap:20px;
+  margin-bottom:28px; color:white;
+}
+.premium-banner-icon { font-size:2rem; flex-shrink:0; }
+.premium-banner h3 { font-family:var(--serif); font-size:1.2rem; font-weight:300; margin-bottom:4px; }
+.premium-banner p { font-size:0.82rem; opacity:0.75; line-height:1.5; }
+
+/* SUCCESS */
+.success-screen {
+  text-align:center; padding:60px 20px;
+}
+.success-icon { font-size:4rem; margin-bottom:20px; }
+.success-screen h2 {
+  font-family:var(--serif); font-size:2.4rem;
+  font-weight:300; margin-bottom:12px;
+}
+.success-screen h2 em { font-style:italic; color:var(--terra); }
+.success-screen p { font-size:0.95rem; color:var(--muted); line-height:1.7; max-width:440px; margin:0 auto 32px; }
+
+/* PROGRESS */
+.progress-wrap { height:3px; background:var(--border); margin-bottom:0; }
+.progress-fill { height:100%; background:var(--terra); transition:width 0.4s ease; }
+
+/* HIGHLIGHT BOX */
+.highlight-box {
+  background:linear-gradient(135deg, #fdf6ec, #f5ede0);
+  border:1px solid rgba(201,163,122,0.4);
+  border-left:3px solid var(--sand);
+  border-radius:4px; padding:16px 20px;
+  margin-bottom:24px; font-size:0.85rem;
+  color:#3a3020; line-height:1.65;
+}
+.highlight-box strong { color:var(--terra); display:block; margin-bottom:4px; }
+
+/* Responsive */
+@media (max-width:768px) {
+  nav { padding:14px 20px; }
+  .hero { padding:48px 24px 56px; }
+  .steps-bar { padding:0 20px; overflow-x:auto; }
+  .main { padding:40px 20px 80px; }
+  .form-row { grid-template-columns:1fr; }
+  .choices { grid-template-columns:1fr 1fr; }
+  .devis-header { flex-direction:column; gap:16px; align-items:flex-start; }
+  .devis-total { flex-direction:column; gap:8px; align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Arsia <span>Studio</span></a>
+  <a href="index.html" class="nav-back">← Retour au portfolio</a>
+</nav>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="progress-fill" id="progressFill" style="width:20%"></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-tag">Devis personnalisé · Gratuit & sans engagement</p>
+  <h1>Votre devis <em>sur mesure</em><br>en 2 minutes</h1>
+  <p>Répondez à quelques questions sur votre commerce et vos objectifs. Je vous prépare une proposition adaptée à votre situation.</p>
+</div>
+
+<!-- STEPS BAR -->
+<div class="steps-bar">
+  <div class="step-item active" id="step-nav-1">
+    <div class="step-num">1</div>
+    <span>Votre commerce</span>
+  </div>
+  <div class="step-sep"></div>
+  <div class="step-item" id="step-nav-2">
+    <div class="step-num">2</div>
+    <span>Situation actuelle</span>
+  </div>
+  <div class="step-sep"></div>
+  <div class="step-item" id="step-nav-3">
+    <div class="step-num">3</div>
+    <span>Objectifs</span>
+  </div>
+  <div class="step-sep"></div>
+  <div class="step-item" id="step-nav-4">
+    <div class="step-num">4</div>
+    <span>Besoins</span>
+  </div>
+  <div class="step-sep"></div>
+  <div class="step-item" id="step-nav-5">
+    <div class="step-num">5</div>
+    <span>Votre devis</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ÉTAPE 1 : TYPE DE COMMERCE -->
+  <div class="step-panel active" id="panel-1">
+    <h2 class="panel-title">Quel est votre <em>type de commerce</em> ?</h2>
+    <p class="panel-sub">Chaque secteur a ses spécificités digitales. Cela nous permet de vous proposer la stratégie la plus adaptée.</p>
+
+    <div class="choices">
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Restaurant / Café / Bar')">
+        <div class="choice-icon">☕</div>
+        <div class="choice-label">Restaurant / Café / Bar</div>
+        <div class="choice-desc">Restauration, snacking, bar à cocktails</div>
+      </div>
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Mode & Accessoires')">
+        <div class="choice-icon">👗</div>
+        <div class="choice-label">Mode & Accessoires</div>
+        <div class="choice-desc">Boutique vêtements, bijoux, maroquinerie</div>
+      </div>
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Beauté / Soins / Coiffure')">
+        <div class="choice-icon">💆</div>
+        <div class="choice-label">Beauté / Soins / Coiffure</div>
+        <div class="choice-desc">Institut, spa, salon de coiffure, onglerie</div>
+      </div>
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Épicerie / Alimentation')">
+        <div class="choice-icon">🌿</div>
+        <div class="choice-label">Épicerie / Alimentation</div>
+        <div class="choice-desc">Épicerie fine, bio, traiteur, boulangerie</div>
+      </div>
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Artisan / Créateur')">
+        <div class="choice-icon">🔨</div>
+        <div class="choice-label">Artisan / Créateur</div>
+        <div class="choice-desc">Artisan, métier d'art, créateur indépendant</div>
+      </div>
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Librairie / Culture')">
+        <div class="choice-icon">📚</div>
+        <div class="choice-label">Librairie / Culture</div>
+        <div class="choice-desc">Librairie, papeterie, galerie, musique</div>
+      </div>
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Sport / Bien-être')">
+        <div class="choice-icon">🧘</div>
+        <div class="choice-label">Sport / Bien-être</div>
+        <div class="choice-desc">Salle de sport, yoga, coaching, naturopathie</div>
+      </div>
+      <div class="choice-card" onclick="selectChoice(this, 'secteur', 'Autre commerce')">
+        <div class="choice-icon">🏪</div>
+        <div class="choice-label">Autre commerce</div>
+        <div class="choice-desc">Fleuriste, déco, animalerie, autre</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nom de votre commerce</label>
+        <input type="text" class="form-input" id="nom-commerce" placeholder="Ex: Café de la Paix">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ville</label>
+        <input type="text" class="form-input" id="ville" placeholder="Ex: Lyon">
+      </div>
+    </div>
+
+    <div class="panel-nav">
+      <span></span>
+      <button class="btn btn-primary" onclick="nextStep(1)" id="btn-next-1" disabled>
+        Étape suivante →
+      </button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 : SITUATION ACTUELLE -->
+  <div class="step-panel" id="panel-2">
+    <h2 class="panel-title">Votre <em>situation actuelle</em></h2>
+    <p class="panel-sub">Pas de jugement — on part de là où vous êtes. Cela nous aide à mesurer le chemin à parcourir.</p>
+
+    <div class="form-group">
+      <label class="form-label">Avez-vous déjà des réseaux sociaux ? (plusieurs choix possibles)</label>
+      <div class="checkbox-grid">
+        <div class="checkbox-item" onclick="toggleCheck(this, 'reseaux', 'Instagram')">
+          <div class="cb-box">✓</div> Instagram
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'reseaux', 'Facebook')">
+          <div class="cb-box">✓</div> Facebook
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'reseaux', 'TikTok')">
+          <div class="cb-box">✓</div> TikTok
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'reseaux', 'Google My Business')">
+          <div class="cb-box">✓</div> Google My Business
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'reseaux', 'Site web')">
+          <div class="cb-box">✓</div> Site web
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'reseaux', 'Aucun')">
+          <div class="cb-box">✓</div> Aucun pour l'instant
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Comment évaluez-vous votre présence digitale actuelle ?</label>
+      <div class="radio-group">
+        <div class="radio-item" onclick="selectRadio(this, 'niveau', 'Inexistante')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Inexistante</div>
+            <div class="radio-desc">Je n'ai aucune présence en ligne ou presque</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'niveau', 'Débutante')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Débutante</div>
+            <div class="radio-desc">J'ai des comptes mais je poste rarement et sans stratégie</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'niveau', 'Intermédiaire')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Intermédiaire</div>
+            <div class="radio-desc">Je poste régulièrement mais sans vraie croissance</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'niveau', 'Active mais inefficace')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Active mais inefficace</div>
+            <div class="radio-desc">Je publie beaucoup mais ça ne génère pas de clients</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-nav">
+      <button class="btn btn-ghost" onclick="prevStep(2)">← Retour</button>
+      <button class="btn btn-primary" onclick="nextStep(2)" id="btn-next-2" disabled>Étape suivante →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 : OBJECTIFS -->
+  <div class="step-panel" id="panel-3">
+    <h2 class="panel-title">Quels sont vos <em>objectifs</em> ?</h2>
+    <p class="panel-sub">Sélectionnez tout ce qui correspond à ce que vous voulez atteindre.</p>
+
+    <div class="checkbox-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Notoriété locale')">
+        <div class="cb-box">✓</div> 📣 Notoriété locale
+      </div>
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Attirer de nouveaux clients')">
+        <div class="cb-box">✓</div> 🧲 Attirer de nouveaux clients
+      </div>
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Remplir mes rendez-vous')">
+        <div class="cb-box">✓</div> 📅 Remplir mes rendez-vous
+      </div>
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Vendre en ligne')">
+        <div class="cb-box">✓</div> 🛒 Vendre en ligne
+      </div>
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Fidéliser ma clientèle')">
+        <div class="cb-box">✓</div> 🤝 Fidéliser ma clientèle
+      </div>
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Améliorer mon image')">
+        <div class="cb-box">✓</div> ✨ Améliorer mon image
+      </div>
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Gérer ma réputation')">
+        <div class="cb-box">✓</div> ⭐ Gérer ma réputation
+      </div>
+      <div class="checkbox-item" onclick="toggleCheck(this, 'objectifs', 'Me former aux réseaux')">
+        <div class="cb-box">✓</div> 🎓 Me former aux réseaux
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Précisez votre objectif principal (optionnel)</label>
+      <textarea class="form-textarea" id="objectif-detail" placeholder="Ex: Je veux remplir ma salle le mercredi midi qui est toujours vide..." style="min-height:80px;"></textarea>
+    </div>
+
+    <div class="panel-nav">
+      <button class="btn btn-ghost" onclick="prevStep(3)">← Retour</button>
+      <button class="btn btn-primary" onclick="nextStep(3)" id="btn-next-3" disabled>Étape suivante →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 : BESOINS & CONTACT -->
+  <div class="step-panel" id="panel-4">
+    <h2 class="panel-title">Vos <em>besoins</em> & vos coordonnées</h2>
+    <p class="panel-sub">Dernière étape avant votre devis personnalisé.</p>
+
+    <div class="form-group">
+      <label class="form-label">Plateformes souhaitées</label>
+      <div class="checkbox-grid">
+        <div class="checkbox-item" onclick="toggleCheck(this, 'plateformes', 'Instagram')">
+          <div class="cb-box">✓</div> 📸 Instagram
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'plateformes', 'Facebook')">
+          <div class="cb-box">✓</div> 📘 Facebook
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'plateformes', 'Google My Business')">
+          <div class="cb-box">✓</div> 🗺️ Google My Business
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'plateformes', 'TikTok')">
+          <div class="cb-box">✓</div> 🎵 TikTok
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'plateformes', 'Site vitrine')">
+          <div class="cb-box">✓</div> 🌐 Site vitrine
+        </div>
+        <div class="checkbox-item" onclick="toggleCheck(this, 'plateformes', 'Je ne sais pas')">
+          <div class="cb-box">✓</div> 🤷 Je ne sais pas encore
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Budget mensuel envisagé</label>
+      <div class="radio-group">
+        <div class="radio-item" onclick="selectRadio(this, 'budget', 'moins-250')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Moins de 250€/mois</div>
+            <div class="radio-desc">Démarrage progressif, budget serré</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'budget', '250-500')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">250€ – 500€/mois</div>
+            <div class="radio-desc">Investissement sérieux pour des résultats visibles</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'budget', '500-1000')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">500€ – 1 000€/mois</div>
+            <div class="radio-desc">Stratégie complète et accompagnement premium</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'budget', 'ponctuel')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Prestation ponctuelle uniquement</div>
+            <div class="radio-desc">Audit, création de profil, shooting, formation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Avez-vous besoin de formation ?</label>
+      <div class="radio-group">
+        <div class="radio-item" onclick="selectRadio(this, 'formation', 'Accompagnement complet')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Accompagnement complet</div>
+            <div class="radio-desc">Je délègue tout à Arsia Studio</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'formation', 'Formation + autonomie')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Formation + autonomie</div>
+            <div class="radio-desc">Je veux apprendre à gérer moi-même avec un accompagnement initial</div>
+          </div>
+        </div>
+        <div class="radio-item" onclick="selectRadio(this, 'formation', 'Mixte')">
+          <div class="radio-dot"></div>
+          <div class="radio-content">
+            <div class="radio-label">Mixte</div>
+            <div class="radio-desc">Gestion partagée entre moi et Arsia Studio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--border);margin:28px 0;">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Votre prénom *</label>
+        <input type="text" class="form-input" id="prenom" placeholder="Marie" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Votre nom *</label>
+        <input type="text" class="form-input" id="nom" placeholder="Martin" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Email *</label>
+        <input type="email" class="form-input" id="email" placeholder="marie@moncommerce.fr" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Téléphone</label>
+        <input type="tel" class="form-input" id="tel" placeholder="06 XX XX XX XX">
+      </div>
+    </div>
+
+    <div class="panel-nav">
+      <button class="btn btn-ghost" onclick="prevStep(4)">← Retour</button>
+      <button class="btn btn-primary" onclick="generateDevis()" id="btn-generate">
+        Générer mon devis →
+      </button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 : DEVIS -->
+  <div class="step-panel" id="panel-5">
+    <h2 class="panel-title">Votre devis <em>personnalisé</em></h2>
+    <p class="panel-sub" id="devis-intro">Voici notre proposition adaptée à votre situation et vos objectifs.</p>
+
+    <div class="devis-result" id="devis-result">
+      <!-- Généré dynamiquement -->
+    </div>
+
+    <div id="devis-form-section">
+      <div class="highlight-box">
+        <strong>📬 Recevoir ce devis par email</strong>
+        Ce devis vous sera envoyé à l'adresse renseignée, ainsi qu'à Arsia Studio. Vous serez recontacté sous 24h pour affiner la proposition.
+      </div>
+
+      <!-- FORMSPREE FORM -->
+      <form id="devis-form" action="https://formspree.io/f/mgopzarg" method="POST">
+        <input type="hidden" name="_subject" value="Nouveau devis Arsia Studio">
+        <input type="hidden" name="_replyto" id="hidden-email">
+        <input type="hidden" name="prenom" id="hidden-prenom">
+        <input type="hidden" name="nom" id="hidden-nom">
+        <input type="hidden" name="telephone" id="hidden-tel">
+        <input type="hidden" name="commerce" id="hidden-commerce">
+        <input type="hidden" name="ville" id="hidden-ville">
+        <input type="hidden" name="secteur" id="hidden-secteur">
+        <input type="hidden" name="reseaux_existants" id="hidden-reseaux">
+        <input type="hidden" name="niveau_actuel" id="hidden-niveau">
+        <input type="hidden" name="objectifs" id="hidden-objectifs">
+        <input type="hidden" name="plateformes_souhaitees" id="hidden-plateformes">
+        <input type="hidden" name="budget" id="hidden-budget">
+        <input type="hidden" name="formation" id="hidden-formation">
+        <input type="hidden" name="offre_recommandee" id="hidden-offre">
+        <input type="hidden" name="devis_detail" id="hidden-devis">
+
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;">
+          <button type="submit" class="btn btn-success">
+            ✉️ Recevoir mon devis par email
+          </button>
+          <button type="button" class="btn btn-ghost" onclick="prevStep(5)">
+            ← Modifier mes réponses
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div id="devis-success" style="display:none;">
+      <div class="success-screen">
+        <div class="success-icon">🎉</div>
+        <h2>Devis envoyé avec <em>succès</em> !</h2>
+        <p>Votre devis personnalisé a été envoyé à votre adresse email. Arsia Studio vous recontactera dans les <strong>24 heures</strong> pour affiner la proposition et répondre à vos questions.</p>
+        <a href="index.html" class="btn btn-primary" style="display:inline-flex;margin:0 auto;">← Retour au portfolio</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────
+const data = {
+  secteur: '', niveau: '', budget: '', formation: '',
+  reseaux: [], objectifs: [], plateformes: []
+};
+let currentStep = 1;
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function nextStep(from) {
+  document.getElementById('panel-' + from).classList.remove('active');
+  document.getElementById('panel-' + (from+1)).classList.add('active');
+  currentStep = from + 1;
+  updateStepNav();
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function prevStep(from) {
+  document.getElementById('panel-' + from).classList.remove('active');
+  document.getElementById('panel-' + (from-1)).classList.add('active');
+  currentStep = from - 1;
+  updateStepNav();
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateStepNav() {
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('step-nav-' + i);
+    el.classList.remove('active', 'done');
+    if (i < currentStep) el.classList.add('done');
+    if (i === currentStep) el.classList.add('active');
+  }
+}
+
+function updateProgress() {
+  document.getElementById('progressFill').style.width = (currentStep * 20) + '%';
+}
+
+// ── CHOICE CARDS ─────────────────────────────────────────────
+function selectChoice(el, field, value) {
+  document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  data[field] = value;
+  checkStep1();
+}
+
+function checkStep1() {
+  const btn = document.getElementById('btn-next-1');
+  btn.disabled = !data.secteur;
+}
+
+// ── RADIO ─────────────────────────────────────────────────────
+function selectRadio(el, field, value) {
+  el.closest('.radio-group').querySelectorAll('.radio-item').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  data[field] = value;
+  checkStep2();
+  checkStep4();
+}
+
+function checkStep2() {
+  const btn = document.getElementById('btn-next-2');
+  if (btn) btn.disabled = !data.niveau;
+}
+
+function checkStep4() {
+  const btn = document.getElementById('btn-generate');
+  if (btn) {
+    const prenom = document.getElementById('prenom')?.value;
+    const email = document.getElementById('email')?.value;
+    btn.disabled = !(data.budget && prenom && email);
+  }
+}
+
+// ── CHECKBOXES ────────────────────────────────────────────────
+function toggleCheck(el, field, value) {
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) {
+    if (!data[field].includes(value)) data[field].push(value);
+  } else {
+    data[field] = data[field].filter(v => v !== value);
+  }
+  checkStep3();
+}
+
+function checkStep3() {
+  const btn = document.getElementById('btn-next-3');
+  if (btn) btn.disabled = data.objectifs.length === 0;
+}
+
+// ── LIVE CHECK FIELDS ─────────────────────────────────────────
+document.addEventListener('input', e => {
+  if (['prenom','nom','email'].includes(e.target.id)) checkStep4();
+});
+
+// ── GENERATE DEVIS ────────────────────────────────────────────
+function generateDevis() {
+  const prenom = document.getElementById('prenom').value;
+  const nom = document.getElementById('nom').value;
+  const email = document.getElementById('email').value;
+  const tel = document.getElementById('tel').value;
+  const commerce = document.getElementById('nom-commerce').value || 'Votre commerce';
+  const ville = document.getElementById('ville').value || '';
+
+  if (!prenom || !email) {
+    alert('Veuillez renseigner votre prénom et votre email.');
+    return;
+  }
+
+  // Determine offer
+  let offre = '', prixBase = 0, isPremium = false;
+  if (data.budget === 'moins-250' || data.budget === 'ponctuel') {
+    offre = 'Starter — Présence Digitale'; prixBase = 250;
+  } else if (data.budget === '250-500') {
+    offre = 'Essentiel — Stratégie & Contenu'; prixBase = 450;
+  } else if (data.budget === '500-1000') {
+    offre = 'Premium — Direction Digitale'; prixBase = 800; isPremium = true;
+  } else {
+    offre = 'Essentiel — Stratégie & Contenu'; prixBase = 450;
+  }
+
+  // Build extras
+  const extras = [];
+  if (data.niveau === 'Inexistante') extras.push({ label: 'Création & optimisation des profils', desc: 'Création complète Instagram, Facebook, GMB', prix: 'Offert (1er mois)' });
+  if (data.objectifs.includes('Vendre en ligne')) extras.push({ label: 'Mise en place Instagram Shopping', desc: 'Catalogue produits + tags shopping', prix: '+50€/mois' });
+  if (data.formation === 'Formation + autonomie') extras.push({ label: 'Session formation (2h)', desc: 'Prise en main des outils & bonnes pratiques', prix: '+200€ one-shot' });
+  if (data.objectifs.includes('Gérer ma réputation')) extras.push({ label: 'Gestion des avis Google', desc: 'Réponses personnalisées + stratégie avis', prix: 'Inclus' });
+  if (data.plateformes.includes('TikTok') && prixBase < 800) extras.push({ label: 'Gestion TikTok', desc: '3 vidéos/semaine + stratégie hashtags', prix: '+150€/mois' });
+
+  // Platforms list
+  const plateformesText = data.plateformes.length > 0 ? data.plateformes.join(', ') : 'À définir ensemble';
+
+  // Build HTML
+  let devisHTML = `
+    <div class="devis-header">
+      <div class="devis-header-left">
+        <h2>${commerce}${ville ? ' · ' + ville : ''}</h2>
+        <p>Devis personnalisé · ${new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})}</p>
+      </div>
+      <div class="devis-badge">${offre.split('—')[0].trim()}</div>
+    </div>
+    <div class="devis-body">
+      <div class="devis-section">
+        <div class="devis-section-title">Profil & situation</div>
+        <div class="devis-line">
+          <div class="devis-line-label">Secteur d'activité<small>${data.secteur}</small></div>
+        </div>
+        <div class="devis-line">
+          <div class="devis-line-label">Présence actuelle<small>${data.niveau}</small></div>
+        </div>
+        <div class="devis-line">
+          <div class="devis-line-label">Réseaux existants<small>${data.reseaux.length > 0 ? data.reseaux.join(', ') : 'Aucun'}</small></div>
+        </div>
+        <div class="devis-line">
+          <div class="devis-line-label">Objectifs<small>${data.objectifs.join(' · ')}</small></div>
+        </div>
+      </div>
+
+      <div class="devis-section">
+        <div class="devis-section-title">Offre recommandée</div>
+        <div class="devis-line">
+          <div class="devis-line-label"><strong>${offre}</strong><small>Formule mensuelle sans engagement</small></div>
+          <div class="devis-line-val">Sur devis</div>
+        </div>
+        <div class="devis-line">
+          <div class="devis-line-label">Plateformes gérées<small>${plateformesText}</small></div>
+        </div>
+        <div class="devis-line">
+          <div class="devis-line-label">Mode d'accompagnement<small>${data.formation || 'À définir'}</small></div>
+        </div>
+      </div>`;
+
+  if (extras.length > 0) {
+    devisHTML += `<div class="devis-section"><div class="devis-section-title">Options recommandées pour vous</div>`;
+    extras.forEach(e => {
+      devisHTML += `<div class="devis-line">
+        <div class="devis-line-label">${e.label}<small>${e.desc}</small></div>
+        <div class="devis-line-val" style="font-size:0.85rem;">${e.prix}</div>
+      </div>`;
+    });
+    devisHTML += `</div>`;
+  }
+
+  devisHTML += `</div>`;
+
+  if (isPremium) {
+    devisHTML += `
+    <div style="padding:0 36px 28px;">
+      <div class="premium-banner">
+        <div class="premium-banner-icon">⭐</div>
+        <div>
+          <h3>Offre Premium — accompagnement sur mesure</h3>
+          <p>Cette offre inclut une stratégie digitale complète, un shooting mensuel, la gestion de tous vos réseaux et un suivi personnalisé. Le tarif est défini lors de notre appel découverte selon vos besoins précis.</p>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  devisHTML += `
+    <div class="devis-total">
+      <div>
+        <div class="devis-total-label">Investissement mensuel estimé</div>
+        <div class="devis-total-val">Sur devis personnalisé<small>· sans engagement</small></div>
+      </div>
+    </div>`;
+
+  document.getElementById('devis-result').innerHTML = devisHTML;
+  document.getElementById('devis-intro').textContent =
+    `Bonjour ${prenom} ! Voici notre proposition pour ${commerce}.`;
+
+  // Fill hidden fields
+  document.getElementById('hidden-email').value = email;
+  document.getElementById('hidden-prenom').value = prenom;
+  document.getElementById('hidden-nom').value = nom;
+  document.getElementById('hidden-tel').value = tel;
+  document.getElementById('hidden-commerce').value = commerce;
+  document.getElementById('hidden-ville').value = ville;
+  document.getElementById('hidden-secteur').value = data.secteur;
+  document.getElementById('hidden-reseaux').value = data.reseaux.join(', ');
+  document.getElementById('hidden-niveau').value = data.niveau;
+  document.getElementById('hidden-objectifs').value = data.objectifs.join(', ');
+  document.getElementById('hidden-plateformes').value = data.plateformes.join(', ');
+  document.getElementById('hidden-budget').value = data.budget;
+  document.getElementById('hidden-formation').value = data.formation;
+  document.getElementById('hidden-offre').value = offre;
+  document.getElementById('hidden-devis').value =
+    `Secteur: ${data.secteur} | Niveau: ${data.niveau} | Budget: ${data.budget} | Objectifs: ${data.objectifs.join(', ')} | Plateformes: ${data.plateformes.join(', ')} | Formation: ${data.formation}`;
+
+  nextStep(4);
+}
+
+// ── FORM SUBMIT ───────────────────────────────────────────────
+document.getElementById('devis-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('button[type="submit"]');
+  btn.textContent = 'Envoi en cours...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://formspree.io/f/mgopzarg', {
+      method: 'POST',
+      body: new FormData(this),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      document.getElementById('devis-form-section').style.display = 'none';
+      document.getElementById('devis-success').style.display = 'block';
+    } else {
+      btn.textContent = '✉️ Recevoir mon devis par email';
+      btn.disabled = false;
+      alert('Une erreur est survenue. Veuillez réessayer.');
+    }
+  } catch {
+    btn.textContent = '✉️ Recevoir mon devis par email';
+    btn.disabled = false;
+    alert('Erreur réseau. Veuillez réessayer.');
+  }
+});
+</script>
+</body>
+</html>
